@@ -17,4 +17,4 @@
 
 Для пересборки установщика выполните `python3 cloudpage/tools/package-cloudpage.py`.
 
-CloudPage основан на Homepage. [Лицензия GPL-3.0](cloudpage/LICENSE).
+[Правовые уведомления](NOTICE.md)
