@@ -16,5 +16,3 @@
 ```
 
 Для пересборки установщика выполните `python3 cloudpage/tools/package-cloudpage.py`.
-
-[Правовые уведомления](NOTICE.md)
