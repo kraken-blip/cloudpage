@@ -17,7 +17,7 @@ install_new_packages() {
 
 ensure_docker() {
   if command -v docker >/dev/null; then
-    echo "Использую установленный локальный Docker."
+    echo "Docker уже установлен. Переустановка не требуется."
     return
   fi
   [[ ! -e /var/lib/cloudpage-docker-managed && ! -L /var/lib/cloudpage-docker-managed ]] || die "Осталась запись о предыдущей установке Docker."

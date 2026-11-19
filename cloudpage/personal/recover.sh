@@ -7,7 +7,7 @@ src=$(cd -- "$(dirname -- "$0")" && pwd -P)
 root=/opt/cloudpage
 menu_command=/usr/local/bin/cloudpage
 [[ -d $root && ! -L $root && $(stat -c '%u:%a' "$root") == 0:700 ]] ||
-  die "Нет установленного каталога CloudPage с владельцем root и правами 0700. Для установки выберите пункт 1."
+  die "Нет установленного каталога CloudPage с владельцем root и правами 0700. Для установки выберите пункт 2."
 cd -- "$root"
 for file in compose.yaml .env admin.json; do
   [[ -f $file && ! -L $file && -s $file ]] || die "Файл $file отсутствует или неполон. Проверьте резервную копию."

@@ -44,9 +44,10 @@ export DOCKER_HOST=unix:///var/run/docker.sock
 if [[ ${1:-} == --docker-only ]]; then
   ensure_docker
 fi
-command -v docker >/dev/null || die "Docker не найден. Вернитесь в главное меню и выберите 2 — Установить Docker."
+command -v docker >/dev/null || die "Docker не найден. Вернитесь в главное меню и выберите 1 — Проверить или установить Docker."
 [[ -S /var/run/docker.sock ]] || die "Docker CLI найден, но локальный сокет Docker Engine недоступен."
 engine=$(docker version --format '{{.Server.Version}}') || die "Локальный Docker Engine недоступен."
+[[ ${engine%%.*} =~ ^[0-9]+$ ]] && (( ${engine%%.*} >= 28 )) || die "CloudPage требует Docker Engine 28 или новее для изоляции локального порта."
 if [[ ${1:-} == --docker-only ]]; then
   printf 'Docker Engine %s готов.\n' "$engine"
   if ! docker buildx version >/dev/null 2>&1; then
@@ -57,12 +58,11 @@ if [[ ${1:-} == --docker-only ]]; then
   fi
   docker buildx version >/dev/null 2>&1 && docker compose version >/dev/null 2>&1 ||
     die "Для CloudPage требуются оба плагина: Buildx и Compose v2."
-  echo "Для установки CloudPage выберите пункт 1 в главном меню."
+  echo "Docker, Buildx и Compose v2 готовы."
   exit 0
 fi
-[[ ${engine%%.*} =~ ^[0-9]+$ ]] && (( ${engine%%.*} >= 28 )) || die "CloudPage требует Docker Engine 28 или новее для изоляции локального порта."
-docker compose version >/dev/null 2>&1 || die "Docker найден. Выберите пункт 2, чтобы установить только Compose v2."
-docker buildx version >/dev/null 2>&1 || die "Docker найден. Выберите пункт 2, чтобы проверить возможность установить только Buildx."
+docker compose version >/dev/null 2>&1 || die "Docker найден. Выберите пункт 1, чтобы установить только Compose v2."
+docker buildx version >/dev/null 2>&1 || die "Docker найден. Выберите пункт 1, чтобы проверить возможность установить только Buildx."
 command -v python3 >/dev/null || die "Требуется Python 3."
 [[ -z $(docker ps -aq --filter label=com.docker.compose.project=cloudpage) ]] || die "Compose-проект cloudpage уже существует."
 [[ -z $(docker network ls -q --filter name='^cloudpage_private$') ]] || die "Имя сети уже занято."

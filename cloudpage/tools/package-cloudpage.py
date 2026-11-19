@@ -38,8 +38,8 @@ while :; do
 ┌─────────────────────────────────────────────────────────┐
 │ CloudPage · Установка                                   │
 ├─────────────────────────────────────────────────────────┤
-│ 1. Установить CloudPage                                 │
-│ 2. Установить Docker                                    │
+│ 1. Проверить или установить Docker                      │
+│ 2. Установить CloudPage                                 │
 │ 3. Открыть меню установленной панели                    │
 │ 4. Обновить меню установленной панели                   │
 │ 5. Продолжить установку / Восстановить запуск            │
@@ -49,8 +49,18 @@ while :; do
 MENU
   read -rp "Выберите пункт [1]: " choice || exit 0
   case "${choice:-1}" in
-    1) CLOUDPAGE_BACK_TO_SETUP=1 bash "$workdir/install.sh" || echo "Установка остановлена." ;;
-    2) bash "$workdir/install.sh" --docker-only || echo "Установка Docker остановлена." ;;
+    1)
+      if bash "$workdir/install.sh" --docker-only; then
+        if [[ -e /opt/cloudpage || -L /opt/cloudpage ]]; then
+          echo "CloudPage уже есть на диске. Для управления выберите 3, для восстановления — 5."
+        else
+          echo "Следующий шаг — настройка CloudPage."
+          CLOUDPAGE_BACK_TO_SETUP=1 bash "$workdir/install.sh" || echo "Установка CloudPage остановлена."
+        fi
+      else
+        echo "Подготовка Docker остановлена."
+      fi ;;
+    2) CLOUDPAGE_BACK_TO_SETUP=1 bash "$workdir/install.sh" || echo "Установка CloudPage остановлена." ;;
     3) CLOUDPAGE_BACK_TO_SETUP=1 /opt/cloudpage/menu || echo "Не удалось открыть меню CloudPage." ;;
     4) CLOUDPAGE_BACK_TO_SETUP=1 bash "$workdir/install.sh" --update-menu || echo "Обновление меню остановлено." ;;
     5) CLOUDPAGE_BACK_TO_SETUP=1 bash "$workdir/install.sh" --recover || echo "Проверьте сообщение о восстановлении выше." ;;
