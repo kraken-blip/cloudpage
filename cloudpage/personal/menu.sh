@@ -43,7 +43,7 @@ MENU
   cat <<'CLOUDPAGE_DOWNLOAD'
 
 Скачать установщик с GitHub и открыть меню (от root):
-( set -eu; test "$(id -u)" = 0 || { echo 'Откройте терминал от root (sudo -i).'; exit 1; }; umask 077; tmp=$(mktemp /root/.cloudpage-install.XXXXXX); trap 'rm -f -- "$tmp"' EXIT; curl -fsSL --proto '=https' --proto-redir '=https' https://raw.githubusercontent.com/pos87-blip/cloudpage-public/main/exports/cloudpage-install.run -o "$tmp"; grep -qxF CLOUDPAGE_PACKAGE_EOF "$tmp"; bash -n "$tmp"; mv -fT -- "$tmp" /root/cloudpage-install.run; bash /root/cloudpage-install.run )
+( set -eu; test "$(id -u)" = 0 || { echo 'Откройте терминал от root (sudo -i).'; exit 1; }; umask 077; tmp=$(mktemp /root/.cloudpage-install.XXXXXX); trap 'rm -f -- "$tmp"' EXIT; curl -fsSL --proto '=https' --proto-redir '=https' https://raw.githubusercontent.com/pos87-blip/cloudpage/main/exports/cloudpage-install.run -o "$tmp"; grep -qxF CLOUDPAGE_PACKAGE_EOF "$tmp"; bash -n "$tmp"; mv -fT -- "$tmp" /root/cloudpage-install.run; bash /root/cloudpage-install.run )
 
 Открыть уже скачанную копию:
   bash /root/cloudpage-install.run
