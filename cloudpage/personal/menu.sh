@@ -40,7 +40,15 @@ MENU
     printf '%s\n' '│  0. Выход                                               │'
   fi
   printf '%s\n' '└─────────────────────────────────────────────────────────┘'
-  printf '\nКоманда для открытия установщика:\n  bash /root/cloudpage-install.run\n\n'
+  cat <<'CLOUDPAGE_DOWNLOAD'
+
+Скачать установщик с GitHub и открыть меню (от root):
+( set -eu; test "$(id -u)" = 0 || { echo 'Откройте терминал от root (sudo -i).'; exit 1; }; umask 077; tmp=$(mktemp /root/.cloudpage-install.XXXXXX); trap 'rm -f -- "$tmp"' EXIT; curl -fsSL --proto '=https' --proto-redir '=https' https://raw.githubusercontent.com/pos87-blip/cloudpage-public/main/exports/cloudpage-install.run -o "$tmp"; grep -qxF CLOUDPAGE_PACKAGE_EOF "$tmp"; bash -n "$tmp"; mv -fT -- "$tmp" /root/cloudpage-install.run; bash /root/cloudpage-install.run )
+
+Открыть уже скачанную копию:
+  bash /root/cloudpage-install.run
+
+CLOUDPAGE_DOWNLOAD
   read -rp "Выберите пункт: " action || exit 0
   case "$action" in
     1) link || echo "Адрес пока не подтверждён." ;;

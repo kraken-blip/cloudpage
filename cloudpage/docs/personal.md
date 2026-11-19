@@ -4,11 +4,13 @@
 
 ## Установка
 
-На чистой Ubuntu 22.04, 24.04, 26.04 или 26.10 (amd64/arm64) установщик самостоятельно подключает подписанный [официальный репозиторий Docker](https://docs.docker.com/engine/install/ubuntu/) и устанавливает Docker Engine, Compose, Buildx и необходимые системные пакеты. Если Docker уже установлен, установщик использует его без обновления и перезапуска. Конфликтующие пакеты и следы старой установки останавливают автоматическую установку до изменения APT. Для других Linux нужен готовый локальный Docker Engine 28+, Compose с поддержкой `up --wait`, Buildx, Python 3 и обычное сопоставление UID. Во время сборки Docker получает Node и зависимости из публичных реестров. Перенесите файл `cloudpage-install.run` на VPS и запустите:
+На чистой Ubuntu 22.04, 24.04, 26.04 или 26.10 (amd64/arm64) установщик самостоятельно подключает подписанный [официальный репозиторий Docker](https://docs.docker.com/engine/install/ubuntu/) и устанавливает Docker Engine, Compose, Buildx и необходимые системные пакеты. Если Docker уже установлен, установщик использует его без обновления и перезапуска. Конфликтующие пакеты и следы старой установки останавливают автоматическую установку до изменения APT. Для других Linux нужен готовый локальный Docker Engine 28+, Compose с поддержкой `up --wait`, Buildx, Python 3 и обычное сопоставление UID. Во время сборки Docker получает Node и зависимости из публичных реестров. На VPS откройте оболочку root (`sudo -i`) и выполните:
 
 ```bash
-sudo bash ./cloudpage-install.run
+( set -eu; test "$(id -u)" = 0 || { echo 'Откройте терминал от root (sudo -i).'; exit 1; }; umask 077; tmp=$(mktemp /root/.cloudpage-install.XXXXXX); trap 'rm -f -- "$tmp"' EXIT; curl -fsSL --proto '=https' --proto-redir '=https' https://raw.githubusercontent.com/pos87-blip/cloudpage-public/main/exports/cloudpage-install.run -o "$tmp"; grep -qxF CLOUDPAGE_PACKAGE_EOF "$tmp"; bash -n "$tmp"; mv -fT -- "$tmp" /root/cloudpage-install.run; bash /root/cloudpage-install.run )
 ```
+
+Команда скачивает установщик из ветки `main` и сохраняет его в `/root/cloudpage-install.run`. Эту копию можно повторно открыть командой `bash /root/cloudpage-install.run`.
 
 В стартовом меню выберите пункт 1 для установки CloudPage с готовым Docker. Если Docker отсутствует, пункт 1 возвращает в меню. Выберите пункт 2 для установки Docker, затем пункт 1. Пункт 2 проверяет уже установленный Docker и может предложить отдельно добавить Buildx из текущих репозиториев APT. Пункт 3 открывает меню уже установленной панели. Пункт 4 обновляет инструменты управления без перезапуска контейнеров. Пункт 0 в меню управления возвращает в меню установщика, если оно открыто через установочный файл. Укажите свободный локальный порт, способ доступа и данные для входа.
 
