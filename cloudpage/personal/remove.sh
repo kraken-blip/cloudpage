@@ -35,8 +35,11 @@ while read -r package; do
   grep -Fxq -- "$package" "$marker" || { echo "APT затронет другой пакет: $package. Отмена."; exit 1; }
 done < <(awk '/^(Remv|Purg) / { print $2 }' <<<"$plan")
 printf 'Будут удалены CloudPage, карточки, сертификаты и локальный Docker.\n'
-read -rp 'Для удаления введите УДАЛИТЬ: ' confirmation
-[[ $confirmation == УДАЛИТЬ ]] || { echo "Удаление отменено."; exit 0; }
+if ! read -rp 'Удалить? [да/нет]: ' confirmation ||
+   [[ $confirmation != да && $confirmation != Да && $confirmation != ДА ]]; then
+  echo "Удаление отменено."
+  exit 0
+fi
 check_resources || { echo "Состав Docker изменился. Отмена."; exit 1; }
 compose down </dev/null
 apt-get -y purge "${packages[@]}" </dev/null
