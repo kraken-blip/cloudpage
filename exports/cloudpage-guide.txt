@@ -4,7 +4,7 @@ CloudPage — короткий гайд по установке
    Подключитесь к VPS по SSH. Откройте оболочку root (sudo -i) и
    вставьте команду целиком. Понадобится curl.
 
-   ( set -eu; test "$(id -u)" = 0 || { echo 'Откройте терминал от root (sudo -i).'; exit 1; }; umask 077; tmp=$(mktemp /root/.cloudpage-install.XXXXXX); trap 'rm -f -- "$tmp"' EXIT; curl -fsSL --proto '=https' --proto-redir '=https' https://raw.githubusercontent.com/pos87-blip/cloudpage/main/exports/cloudpage-install.run -o "$tmp"; grep -qxF CLOUDPAGE_PACKAGE_EOF "$tmp"; bash -n "$tmp"; mv -fT -- "$tmp" /root/cloudpage-install.run; bash /root/cloudpage-install.run )
+   ( set -eu; test "$(id -u)" = 0 || { echo 'Откройте терминал от root (sudo -i).'; exit 1; }; umask 077; tmp=$(mktemp /root/.cloudpage-install.XXXXXX); trap 'rm -f -- "$tmp"' EXIT; curl -fsSL --proto '=https' --proto-redir '=https' https://raw.githubusercontent.com/kraken-blip/cloudpage/main/exports/cloudpage-install.run -o "$tmp"; grep -qxF CLOUDPAGE_PACKAGE_EOF "$tmp"; bash -n "$tmp"; mv -fT -- "$tmp" /root/cloudpage-install.run; bash /root/cloudpage-install.run )
 
    Команда сохраняет установщик в /root/cloudpage-install.run.
    Для работы с уже скачанной копией введите:
